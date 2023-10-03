@@ -7,7 +7,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import accuracy_score, classification_report
 import pandas as pd
 import zipfile
-from tqdm import tqdm  # For progress bar
+from tqdm import tqdm  # For the progress bar
 import matplotlib.pyplot as plt
 import random
 
@@ -30,24 +30,9 @@ with zipfile.ZipFile(zip_path, 'r') as zip_ref:
 data_file = "C:\\Users\\sreec\\OneDrive\\Desktop\\Research\\IMDB Dataset.csv"
 texts, labels = load_imdb_data(data_file)
 
-# Load IMDB data
-def load_imdb_data(data_file):
-    df = pd.read_csv(data_file)
-    texts = df['review'].tolist()
-    labels = [1 if sentiment == "positive" else 0 for sentiment in df['sentiment'].tolist()]
-    return texts, labels
-
-# Fraction of the dataset to use for debugging (e.g., 5% for an even smaller subset)
-debug_fraction = 0.05
-
-# Create a smaller subset of the dataset for debugging
-num_debug_samples = int(len(texts) * debug_fraction)
-debug_texts = texts[:num_debug_samples]
-debug_labels = labels[:num_debug_samples]
-
-# Split the debug dataset into training and validation sets
+# Split the dataset into training and validation sets
 train_texts, val_texts, train_labels, val_labels = train_test_split(
-    debug_texts, debug_labels, test_size=0.2, random_state=42
+    texts, labels, test_size=0.2, random_state=42
 )
 
 # Define your BERT model class here
@@ -134,7 +119,6 @@ total_steps = len(train_dataloader) * num_epochs
 scheduler = get_linear_schedule_with_warmup(optimizer, num_warmup_steps=0, num_training_steps=total_steps)
 
 # Training loop
-# Training loop
 for epoch in range(num_epochs):
     print(f"Epoch {epoch + 1}/{num_epochs}")
     
@@ -208,7 +192,3 @@ def visualize_predictions(model, texts, labels, tokenizer, max_length, num_sampl
         plt.axis('off')
 
     plt.show()
-
-
-
-
